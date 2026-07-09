@@ -9,17 +9,28 @@ import SwiftUI
 struct CategoryRoot: View {
     @Environment(AppRouter.self) var router
         
+    @State var cateVM: CategoryViewModel = .init()
+    
     var body: some View {
         @Bindable var router = router
         NavigationStack(path: $router.category){
             Text("Category Root")
             
             List {
-                ForEach(0..<5){ category in
+                ForEach(cateVM.categories){ category in
                     HStack  {
-                        Text("Category \(category)")
+                        Text("\(category.name)")
                         Spacer()
-                        Button{} label: {
+                        Button{
+                            router.push(.editCategory(category: category))
+                        } label: {
+                            Text("Edit")
+                                .font(Font.body.weight(.bold))
+                        }
+                        .buttonStyle(.glassProminent)
+                        Button{
+                            cateVM.deleteCategory(id: category.id)
+                        } label: {
                             Image(systemName: "trash.fill")
                         }
                         .buttonStyle(.glassProminent)
@@ -33,11 +44,21 @@ struct CategoryRoot: View {
                 }
                 .buttonStyle(.glassProminent)
             }
+            .onTapGesture {
+                
+            }
             
                 .navigationDestination(for: DanhBa.self){ route in
                     switch route {
                     case .addCategory:
-                        AddCategory()
+                        AddCategory(category: nil)
+                            .environment(router)
+                            .environment(cateVM)
+                    case .editCategory(let category):
+                        AddCategory(category: category)
+                            .environment(router)
+                            .environment(cateVM)
+                        
                     default:
                         EmptyView()
                     }

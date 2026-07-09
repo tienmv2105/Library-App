@@ -8,11 +8,26 @@ import SwiftUI
 
 struct AddCategory: View {
     @Environment(AppRouter.self) var router
+    @Environment(CategoryViewModel.self) var cateVM
     
     @State var categoryName: String = ""
+    
+    let category: Category?
+    
+    init(category: Category?) {
+        self.category = category
+        _categoryName = State(initialValue: category?.name ?? "")
+        
+    }
+    
     var body: some View {
         VStack {
-            Text("Add Category screen")
+            if category == nil {
+                Text("Add Category screen")
+            } else {
+                Text("Ban dang edit category: \(category?.name ?? "")")
+            }
+            
             VStack(alignment: .leading){
                 Text("Category name")
                     .font(Font.system(size: 20, weight: .bold))
@@ -31,6 +46,15 @@ struct AddCategory: View {
             .padding(.horizontal)
             
             Button{
+                // Luồng tạo category mới
+                if category == nil {
+                    _ = cateVM.addCategory(categoryName: categoryName)
+                    
+                } else {
+                    if let id = category?.id {
+                        cateVM.editCategory(id: id, newName: categoryName)
+                    }
+                }
                 router.pop()
             } label: {
                 Text("Add category")
@@ -53,6 +77,7 @@ struct AddCategory: View {
 }
 
 #Preview {
-    AddCategory()
+    AddCategory(category: nil)
         .environment(AppRouter())
+        .environment(CategoryViewModel())
 }

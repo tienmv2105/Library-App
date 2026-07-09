@@ -9,22 +9,39 @@ import SwiftUI
 struct BookRoot: View {
     @Environment(AppRouter.self) var router
     
+    @State var bookVM: BookViewModel = .init()
+    @State var searchText: String = ""
     
     var body: some View {
         @Bindable var router = router
         NavigationStack(path: $router.book){
             VStack{
-                Text("Book screen")
                 List {
-                     ForEach(0..<5) { book in
-                         HStack{
-                             Text("Book \(book)")
-                             Spacer()
-                             Button{} label: {
-                                 Image(systemName: "trash.fill")
-                             }
-                             .buttonStyle(.glassProminent)
-                         }
+                    ForEach(bookVM.searchBook(searchTextfield: searchText)) { book in
+                        HStack{
+                            Text("\(book.name)")
+                            Divider()
+                            Text("\(book.author)")
+                            Spacer()
+                            Button{
+                                router.push(.editBook(book))
+                            }label: {
+                                Text("Edit")
+                                    .fontWeight(.bold)
+                            }
+                            .buttonStyle(.glassProminent)
+                            Button{
+                                bookVM.deleteBook(bookID: book.id)
+                            } label: {
+                                Image(systemName: "trash.fill")
+                            }
+                            .buttonStyle(.glassProminent)
+                            .tint(.red)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            router.push(.detailBook(book))
+                        }
                     }
                     Button{
                         router.push(.addBook)
@@ -36,19 +53,23 @@ struct BookRoot: View {
                     }
                     .buttonStyle(.glassProminent)
                 }
-                .onTapGesture {
-                    router.push(.detailBook)
-                }
             }
             .navigationTitle(Text("Book Screen"))
+            .searchable(text: $searchText, placement: .navigationBarDrawer)
             .navigationDestination(for: DanhBa.self) { route in
                 switch route {
                 case.addBook:
-                    AddBook()
+                    AddBook(book: nil)
                         .environment(router)
-                case .detailBook:
-                    DetailBook()
+                        .environment(bookVM)
+                case .detailBook(let book):
+                    DetailBook(book: book)
                         .environment(router)
+                        .environment(bookVM)
+                case .editBook(let book):
+                    AddBook(book: book)
+                        .environment(router)
+                        .environment(bookVM)
                 default:
                     EmptyView()
                 }
@@ -60,4 +81,5 @@ struct BookRoot: View {
 #Preview {
     BookRoot()
         .environment(AppRouter())
+        .environment(BookViewModel())
 }

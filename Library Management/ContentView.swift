@@ -68,9 +68,11 @@ enum DanhBa: Hashable{
     case user
     case addCategory
     case addBook
-    case detailBook
+    case editBook(Book)
+    case detailBook(Book)
     case addUser
     case detailUser
+    case editCategory(category: Category)
 }
 
 

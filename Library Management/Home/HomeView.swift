@@ -17,6 +17,7 @@ enum DanhBaTab: Hashable {
 struct HomeView: View {
     @Environment(ViewModel.self) var viewModel
     @Environment(AppRouter.self) var router
+    @Environment(BookViewModel.self) var bookVM
     
     
     var body: some View {
@@ -50,4 +51,5 @@ struct HomeView: View {
     HomeView()
         .environment(AppRouter())
         .environment(ViewModel())
+        .environment(BookViewModel())
 }

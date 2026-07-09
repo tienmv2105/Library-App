@@ -26,8 +26,7 @@ struct Category: Identifiable, Equatable, Hashable {
 struct Book: Identifiable, Equatable, Hashable {
     let id: String = UUID().uuidString
     var name: String
-    var categoryID: String
-    var title: String
+    var categoryID: String 
     var author: String
     var publishYear: Int
     var quantity: Int
@@ -37,7 +36,7 @@ struct Book: Identifiable, Equatable, Hashable {
 struct BookBorrowRecord: Identifiable, Equatable, Hashable {
     let id: String = UUID().uuidString
     var userID: String
-    var bookID: String
+    var bookID: String = UUID().uuidString
     var borrowDate: Date
     var returnDate: Date
     var isReturn: Bool
