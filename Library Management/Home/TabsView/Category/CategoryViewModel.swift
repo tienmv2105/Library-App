@@ -11,9 +11,9 @@ import Observation
 class CategoryViewModel {
     
     var categories: [Category] = [
-        Category(name: "Fiction"),
-        Category(name: "Non-Fiction"),
-        Category(name: "Children")
+        Category(name: "Manga"),
+        Category(name: "Horror"),
+        Category(name: "Comic")
     ]
     
     func addCategory(categoryName: String) -> Category {
@@ -33,5 +33,11 @@ class CategoryViewModel {
             categories[index].name = newName
         }
     }
+    
+    //Hàm "bắc cầu" để giao diện gọi và in ra tên thể loại
+    func getCategory(id: String) -> Category? {
+        return categories.first(where: { $0.id == id })
+    }
+    
     
 }

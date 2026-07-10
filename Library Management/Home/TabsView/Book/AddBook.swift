@@ -9,12 +9,16 @@ import SwiftUI
 struct AddBook: View {
     @Environment(AppRouter.self) var router
     @Environment(BookViewModel.self) var bookVM
+    // Nhận cateVM từ môi trường
+    @Environment(CategoryViewModel.self) var categoryVM
     
     @State var bookName: String = ""
-    @State var selectedCategoryID: String = ""
     @State var bookAuthor: String = ""
     @State var bookPublishYear: String = ""
     @State var bookQuantity: String = ""
+    
+    // 1. Tạo 1 biến chứa ID của thể loại
+    @State var selectedCategoryID: String = ""
     
     let book: Book?
     
@@ -69,22 +73,22 @@ struct AddBook: View {
                     Text("Category ")
                         .font(Font.system(size: 20, weight: .bold))
                     
+                    // 2.Tạo picker, mỗi selection == $selectedCategoryID
                     Menu{
                         Picker("Category", selection: $selectedCategoryID){
-                            ForEach(bookVM.categories){ category in
+                            // Duyệt mảng Categories
+                            ForEach(categoryVM.categories){ category in
+                                // Hiển thị Category có trong categories, VÀ GẮN CÁI ID CỦA Category VÀO BIẾN selectedCategoryID
                                 Text(category.name).tag(category.id)
                                     .foregroundStyle(Color.black)
                             }
                         }
                     } label: {
                         HStack{
-                            if let currentCategory = bookVM.categories.first(where: { $0.id == selectedCategoryID
-                            }){
+                            // 3. Dùng hàm getCategory để lấy id của từng cate rồi gán vào biến tạm currentCategory
+                            if let currentCategory = categoryVM.getCategory(id: selectedCategoryID){
                                 Text(currentCategory.name)
-                                    .foregroundStyle(Color.black)
                             }
-                            Spacer()
-                            Image(systemName: "chevron.up.chevron.down")
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -135,6 +139,7 @@ struct AddBook: View {
             
             Button{
                 if book == nil{
+                    // ép kiểu String sang Int
                     let intPublishYear = Int(bookPublishYear) ?? 0
                     let intQuantity = Int(bookQuantity) ?? 0
                     bookVM.addBook(name: bookName, categoryID: selectedCategoryID, author: bookAuthor, publishYear: intPublishYear, quantity: intQuantity)
@@ -148,17 +153,31 @@ struct AddBook: View {
                     }
                 }
             } label: {
-                Text("Add book")
-                    .foregroundStyle(Color.white)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .contentShape(Rectangle())
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .background{
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.blue)
-                    }
+                if book == nil {
+                    Text("Add book")
+                        .foregroundStyle(Color.white)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .contentShape(Rectangle())
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background{
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.blue)
+                        }
+                } else {
+                    Text("Save edit")
+                        .foregroundStyle(Color.white)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .contentShape(Rectangle())
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background{
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.blue)
+                        }
+                }
             }
             .padding(.horizontal)
             .navigationTitle(Text("Add book screen"))
@@ -171,4 +190,5 @@ struct AddBook: View {
     AddBook(book:  nil)
         .environment(BookViewModel())
         .environment(AppRouter())
+        .environment(CategoryViewModel())
 }

@@ -9,6 +9,7 @@ import SwiftUI
 struct DetailBook: View {
     @Environment(AppRouter.self) var router
     @Environment(BookViewModel.self) var bookVM
+    @Environment(CategoryViewModel.self) var categorVM
     
     let book: Book
     
@@ -22,11 +23,13 @@ struct DetailBook: View {
             
             Text("Author: \(book.author)")
             
-            Text("Category: ")
+            Text("Category: \(categorVM.getCategory(id: book.categoryID))")
+            
             
             Text("Publish year: \(book.publishYear) ")
             
             Text("Quantity: \(book.quantity)")
+            
             
             
                 .navigationTitle(Text("Detail Book Screen"))
@@ -35,7 +38,8 @@ struct DetailBook: View {
 }
 
 #Preview {
-    DetailBook(book: .init(name: "Book name test", categoryID: " Author test", author: "Category test", publishYear: 2020, quantity: 10))
+    DetailBook(book: Book(name: "Test name", categoryID: "Test", author: "Author test", publishYear: 0, quantity: 0))
         .environment(AppRouter())
         .environment(BookViewModel())
+        .environment(CategoryViewModel())
 }

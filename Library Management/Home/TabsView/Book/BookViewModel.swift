@@ -10,26 +10,9 @@ import Foundation
 @Observable
 class BookViewModel {
     
-    static let manga = Category(name: "Manga")
-    static let horror = Category(name: "Horror")
-    
     var books: [Book] = [
-        Book(name: "One Piece", categoryID: Category(name: "Manga").id, author: "Echiro Oda", publishYear: 1999, quantity: 5),
-        Book(name: "Attack on Titan", categoryID: manga.id, author: "Hajime Isayama", publishYear: 2013, quantity: 3),
-        Book(name: "Demon", categoryID: horror.id, author: "Ted", publishYear: 2004, quantity: 4)
         
     ]
-    
-    var categories: [Category] = [
-        manga,
-        horror
-    ]
-    
-    //Hàm "bắc cầu" để giao diện gọi và in ra tên thể loại
-    func getCategory(for book: Book) -> Category? {
-        return categories.first { $0.id == book.categoryID }
-    }
-    
     
     func addBook(name: String, categoryID: String, author: String, publishYear: Int, quantity: Int){
         let newBook = Book(name: name, categoryID: categoryID, author: author
@@ -39,7 +22,7 @@ class BookViewModel {
     
     func editBook(id: String,newName: String, NewcategoryID: String, newAuthor: String, newPublishYear: Int, newQuantity: Int){
         if let index = books.firstIndex(where: { $0.id == id }){
-            let updatedBook = Book(name: newName, categoryID: newAuthor, author: newAuthor, publishYear: newPublishYear, quantity: newQuantity)
+            let updatedBook = Book(name: newName, categoryID: NewcategoryID, author: newAuthor, publishYear: newPublishYear, quantity: newQuantity)
             books[index] = updatedBook
         }
     }
