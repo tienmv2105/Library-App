@@ -19,6 +19,7 @@ struct HomeView: View {
     @Environment(AppRouter.self) var router
     @Environment(BookViewModel.self) var bookVM
     @Environment(CategoryViewModel.self) var categoryVM
+    @Environment(UserViewModel.self) var userVM
     
     
     var body: some View {
@@ -44,6 +45,7 @@ struct HomeView: View {
             }
             .environment(router)
             .environment(categoryVM)
+            .environment(viewModel)
         }
         .navigationTitle("Home")
     }
@@ -55,4 +57,5 @@ struct HomeView: View {
         .environment(ViewModel())
         .environment(BookViewModel())
         .environment(CategoryViewModel())
+        .environment(UserViewModel())
 }

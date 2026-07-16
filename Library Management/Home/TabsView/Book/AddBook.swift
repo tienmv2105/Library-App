@@ -133,25 +133,21 @@ struct AddBook: View {
                 }
             }
             .onTapGesture {
-
+                
             }
             .padding(.horizontal)
             
             Button{
+                let intPublishYear = Int(bookPublishYear) ?? 0
+                let intQuantity = Int(bookQuantity) ?? 0
                 if book == nil{
-                    // ép kiểu String sang Int
-                    let intPublishYear = Int(bookPublishYear) ?? 0
-                    let intQuantity = Int(bookQuantity) ?? 0
                     bookVM.addBook(name: bookName, categoryID: selectedCategoryID, author: bookAuthor, publishYear: intPublishYear, quantity: intQuantity)
-                    router.pop()
                 } else {
                     if let id = book?.id {
-                        let intPublishYear = Int(bookPublishYear) ?? 0
-                        let intQuantity = Int(bookQuantity) ?? 0
                         bookVM.editBook(id: id, newName: bookName, NewcategoryID: selectedCategoryID, newAuthor: bookAuthor, newPublishYear: intPublishYear, newQuantity: intQuantity)
-                        router.pop()
                     }
                 }
+                router.pop()
             } label: {
                 if book == nil {
                     Text("Add book")
@@ -180,7 +176,7 @@ struct AddBook: View {
                 }
             }
             .padding(.horizontal)
-            .navigationTitle(Text("Add book screen"))
+            .navigationTitle(book == nil ? "Add Book Screen" : "Edit Book Screen")
         }
         
     }

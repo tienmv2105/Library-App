@@ -35,9 +35,15 @@ struct Book: Identifiable, Equatable, Hashable {
 // 4. BorrowRecord - Quản lý việc mượn sách.
 struct BookBorrowRecord: Identifiable, Equatable, Hashable {
     let id: String = UUID().uuidString
-    var userID: String
-    var bookID: String = UUID().uuidString
+    var borrowerID: String
+    var bookID: String
     var borrowDate: Date
     var returnDate: Date
     var isReturn: Bool
+}
+
+struct Borrower: Identifiable, Equatable, Hashable {
+    var id: String = UUID().uuidString
+    var name: String
+    var phone: String
 }

@@ -8,49 +8,70 @@ import SwiftUI
 
 struct UserRoot: View {
     @Environment(AppRouter.self) var router
+    @Environment(ViewModel.self) var viewModel
+    @Environment(UserViewModel.self) var userVM
     
+    @State var searchText: String = ""
     var body: some View {
         @Bindable var router = router
         NavigationStack(path: $router.user){
             VStack{
                 List {
-                    ForEach(0..<5) { user in
-                        HStack{
-                            Text("User \(user)")
-                            Spacer()
-                            
-                            Button{} label: {
-                                Image(systemName: "trash.fill")
+                    Section {
+                        ForEach(userVM.searchBorrower(searchTextfield: searchText)) { borrower in
+                            HStack{
+                                Text("Borrower: \(borrower.name)")
+                                Spacer()
+                                
+                                Button{
+                                    userVM.deleteBorrower(id: borrower.id)
+                                } label: {
+                                    Image(systemName: "trash.fill")
+                                }
+                                .buttonStyle(.glassProminent)
                             }
-                            .buttonStyle(.glassProminent)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                router.push(.detailUser(borrower))
+                            }
                         }
-                    }
-                    Button{
-                        router.push(.addUser)
-                    } label: {
-                        HStack{
-                            Text("Add User")
-                            Spacer()
-                            Image(systemName: "plus")
+                    } footer: {
+                        Button{
+                            router.push(.addUser)
+                        } label: {
+                            HStack{
+                                Text("Add User")
+                                    .font(Font.body.bold())
+                                Spacer()
+                                Image(systemName: "plus")
+                                    .font(Font.body.bold())
+                            }
                         }
+                        .frame(width: 130)
+                        .frame(height: 60)
+                        .buttonStyle(.glassProminent)
+                        .padding(10)
                     }
-                    .buttonStyle(.glassProminent)
-                    .padding(.horizontal)
-
-                }
-                .onTapGesture {
-                    router.push(.detailUser)
                 }
             }
             .navigationTitle(Text("User Root Screen"))
+            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: Text("Search borrower"))
             .navigationDestination(for: DanhBa.self){ route in
                 switch route {
                 case .addUser:
-                    AddUser()
+                    AddUser(borrower: nil)
                         .environment(router)
-                case .detailUser:
-                    DetailUser()
+                case .detailUser(let borrower):
+                    DetailUser(borrower: borrower)
                         .environment(router)
+                case .editUser(let borrower):
+                    AddUser(borrower: borrower)
+                        .environment(router)
+                        .environment(userVM)
+                case .createBorrowRecord:
+                    CreateBorrow()
+                        .environment(router)
+                        .environment(userVM)
                 default:
                     EmptyView()
                 }
@@ -62,4 +83,6 @@ struct UserRoot: View {
 #Preview {
     UserRoot()
         .environment(AppRouter())
+        .environment(ViewModel())
+        .environment(UserViewModel())
 }

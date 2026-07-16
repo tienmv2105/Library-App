@@ -106,8 +106,8 @@ struct Signup: View {
                 
                 if confirmPassword == password && isUsernameExist == false {
                     viewModel.createUser(username: username, password: password, fullName: fullName, role: role)
+                    signUpSuccess = true
                 }
-                signUpSuccess = true
             } label: {
                 Text("Sign up")
                     .font(.title3)

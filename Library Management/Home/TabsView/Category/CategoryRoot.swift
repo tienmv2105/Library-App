@@ -8,8 +8,8 @@ import SwiftUI
 
 struct CategoryRoot: View {
     @Environment(AppRouter.self) var router
-        
-    @State var cateVM: CategoryViewModel = .init()
+    
+    @Environment(CategoryViewModel.self) var cateVM
     
     var body: some View {
         @Bindable var router = router
@@ -34,6 +34,10 @@ struct CategoryRoot: View {
                             Image(systemName: "trash.fill")
                         }
                         .buttonStyle(.glassProminent)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        
                     }
     
                 }
@@ -70,4 +74,5 @@ struct CategoryRoot: View {
 #Preview {
     CategoryRoot()
         .environment(AppRouter())
+        .environment(CategoryViewModel())
 }

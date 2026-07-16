@@ -15,7 +15,6 @@ struct DetailBook: View {
     
     init(book: Book){
         self.book = book
-        
     }
     var body: some View {
         VStack{
@@ -23,8 +22,7 @@ struct DetailBook: View {
             
             Text("Author: \(book.author)")
             
-            Text("Category: \(categorVM.getCategory(id: book.categoryID))")
-            
+            Text("Category: \(categorVM.getCategory(id: book.categoryID)?.name ?? "Not found Category")")
             
             Text("Publish year: \(book.publishYear) ")
             

@@ -43,11 +43,15 @@ class BookViewModel {
         let lowercasedSearchTextfield = searchTextfield.lowercased()
         // 4. Khai báo kết quả là các book trong books có chứa tên(đã xử lý viết hoa,..) và tác giả( đã xử lý viết hoa,..)
         let result = books.filter { book in
-            let matchName = book.name.lowercased().contains(lowercasedSearchTextfield)
-            let matchAuthor = book.author.lowercased().contains(lowercasedSearchTextfield)
+            let bookNameLowercased = book.name.lowercased()
+            let bookAuthorLowercased = book.author.lowercased()
+            let matchName = bookNameLowercased.contains(lowercasedSearchTextfield)
+            let matchAuthor = bookAuthorLowercased.contains(lowercasedSearchTextfield)
             // 5. Trả về tên hoặc tác giả
             return matchName || matchAuthor
         }
+        
+        
         return result
     }
 }
