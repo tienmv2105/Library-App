@@ -38,6 +38,4 @@ class CategoryViewModel {
     func getCategory(id: String) -> Category? {
         return categories.first(where: { $0.id == id })
     }
-    
-    
 }

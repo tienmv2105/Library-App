@@ -74,7 +74,8 @@ enum DanhBa: Hashable{
     case detailUser(Borrower)
     case editCategory(category: Category)
     case editUser(Borrower)
-    case createBorrowRecord
+    case createBorrowRecord(Borrower)
+    case detailRecord(BookBorrowRecord)
 }
 
 

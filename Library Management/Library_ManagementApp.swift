@@ -13,6 +13,7 @@ struct Library_ManagementApp: App {
     @State var bookVM = BookViewModel()
     @State var categoryVM = CategoryViewModel()
     @State var router: AppRouter = .init()
+    @State var userVM = UserViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -22,6 +23,7 @@ struct Library_ManagementApp: App {
             // Truyền cateVM 
                 .environment(categoryVM)
                 .environment(router)
+                .environment(userVM)
         }
     }
 }

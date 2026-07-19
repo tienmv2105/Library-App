@@ -46,6 +46,7 @@ struct HomeView: View {
             .environment(router)
             .environment(categoryVM)
             .environment(viewModel)
+            .environment(bookVM)
         }
         .navigationTitle("Home")
     }

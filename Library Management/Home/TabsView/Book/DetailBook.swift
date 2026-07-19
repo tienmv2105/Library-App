@@ -10,6 +10,7 @@ struct DetailBook: View {
     @Environment(AppRouter.self) var router
     @Environment(BookViewModel.self) var bookVM
     @Environment(CategoryViewModel.self) var categorVM
+    @Environment(UserViewModel.self) var userVM
     
     let book: Book
     
@@ -28,7 +29,13 @@ struct DetailBook: View {
             
             Text("Quantity: \(book.quantity)")
             
+            Text("Books are borrowed: \(userVM.records.filter( { $0.bookID == book.id && $0.isReturn == false }).count)")
             
+            ForEach(userVM.records.filter( { $0.bookID == book.id && $0.isReturn == false }), id: \.id) { record in
+                HStack{
+                    Text("Borrowing: \(userVM.getBorrower(borrowerID: record.borrowerID)?.name ?? "Not founded")")
+                }
+            }
             
                 .navigationTitle(Text("Detail Book Screen"))
         }
@@ -40,4 +47,5 @@ struct DetailBook: View {
         .environment(AppRouter())
         .environment(BookViewModel())
         .environment(CategoryViewModel())
+        .environment(UserViewModel())
 }

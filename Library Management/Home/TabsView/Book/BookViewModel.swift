@@ -50,8 +50,47 @@ class BookViewModel {
             // 5. Trả về tên hoặc tác giả
             return matchName || matchAuthor
         }
-        
-        
         return result
+    }
+    
+    func getBook(id: String) -> Book? {
+        return books.first(where: { $0.id == id })
+    }
+    
+    func getCategoryFromBookID(bookID: String, categories: [Category]) -> Category? {
+        if let book = books.first(where: { $0.id == bookID }) {
+            return categories.first(where: { $0.id == book.categoryID })
+        }
+        return nil
+    }
+    
+    //Hàm xem số lượng Sách trong books
+    func isHaveBook(bookID: String) -> Bool {
+        // Từ bookID tiềm ra index của Book trong books
+        if let index = books.firstIndex(where: { $0.id == bookID }){
+            // Nếu tìm ra thì check số lượng sách có lớn hơn 0
+            if books[index].quantity > 0 {
+                // Nếu lớn hơn 1 thì trừ số lượng quantity của Book đi 1 và trả về true
+                books[index].quantity -= 1
+                // trả về còn
+                return true
+            } else {
+                // nếu không thì trả về false
+                return false
+            }
+        }
+        return false
+    }
+    
+    // Hàm hoàn sách về kho khi return record
+    func returnBook(bookID: String) {
+        if let index = books.firstIndex(where: { $0.id == bookID }){
+            books[index].quantity += 1
+        }
+    }
+    
+    // Hàm lấy tên sách
+    func getBookName(bookID: String) -> Book? {
+        return books.first(where: { $0.id == bookID })
     }
 }

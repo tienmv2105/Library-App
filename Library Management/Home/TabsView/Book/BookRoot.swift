@@ -8,8 +8,9 @@ import SwiftUI
 
 struct BookRoot: View {
     @Environment(AppRouter.self) var router
+    @Environment(BookViewModel.self) var bookVM
+    @Environment(UserViewModel.self) var userVM
     
-    @State var bookVM: BookViewModel = .init()
     @State var searchText: String = ""
     
     var body: some View {
@@ -66,6 +67,7 @@ struct BookRoot: View {
                     DetailBook(book: book)
                         .environment(router)
                         .environment(bookVM)
+                        .environment(userVM)
                 case .editBook(let book):
                     AddBook(book: book)
                         .environment(router)
@@ -82,4 +84,5 @@ struct BookRoot: View {
     BookRoot()
         .environment(AppRouter())
         .environment(BookViewModel())
+        .environment(UserViewModel())
 }

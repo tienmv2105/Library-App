@@ -10,6 +10,7 @@ struct DetailUser: View {
     @Environment(AppRouter.self) var router
     @Environment(ViewModel.self) var viewModel
     @Environment(UserViewModel.self) var userVM
+    @Environment(BookViewModel.self) var bookVM
     
     let borrower: Borrower
     
@@ -17,7 +18,6 @@ struct DetailUser: View {
         self.borrower = borrower
     }
     var body: some View {
-        VStack {
             VStack{
                 VStack{
                     HStack{
@@ -53,15 +53,17 @@ struct DetailUser: View {
                 
                 List {
                     Section {
-                        ForEach(0..<5) { i in
+                        ForEach(userVM.filterRecords(borrowerID: borrower.id)) { record in
                             VStack(alignment: .leading) {
-                                HStack() {
-                                    Text("\(i+1)")
-                                    Divider()
-                                    Text("Book name:")
-                                }
-                                Text("Borrow date:")
-                                    .font(.caption)
+                                Text("Ten Sach:\(bookVM.getBook(id: record.bookID)?.name ?? "Unknow Book")")
+                                Text("Ngay muon: \(record.borrowDate.formatted(date: .numeric, time: .omitted))")
+                                Text("So ngay muon: \(userVM.calculateBorrowDays(borrowDate: record.borrowDate, returnDate: record.returnDate))")
+                                Text("Ngay tra: \(record.returnDate.formatted(date: .abbreviated, time: .shortened))")
+                                Text("\(record.isReturn ? "Returned" : "Not Returned")")
+                                    .foregroundStyle(record.isReturn ? .green : .red)
+                            }
+                            .onTapGesture {
+                                router.push(.detailRecord(record))
                             }
                         }
                     }
@@ -74,7 +76,7 @@ struct DetailUser: View {
                     }
                     footer: {
                         Button{
-                            router.push(.createBorrowRecord)
+                            router.push(.createBorrowRecord(borrower))
                         } label: {
                             HStack {
                                 Text("Create new record")
@@ -92,13 +94,12 @@ struct DetailUser: View {
             .toolbar{
                 ToolbarItem(placement: .topBarTrailing){
                     Button{
-                        router.push(.createBorrowRecord)
+                        router.push(.createBorrowRecord(borrower))
                     } label: {
                         Text("Create records")
                     }
                 }
             }
-        }
     }
 }
 
@@ -107,4 +108,5 @@ struct DetailUser: View {
         .environment(AppRouter())
         .environment(UserViewModel())
         .environment(ViewModel())
+        .environment(BookViewModel())
 }

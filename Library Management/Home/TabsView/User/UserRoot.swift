@@ -10,6 +10,8 @@ struct UserRoot: View {
     @Environment(AppRouter.self) var router
     @Environment(ViewModel.self) var viewModel
     @Environment(UserViewModel.self) var userVM
+    @Environment(BookViewModel.self) var bookVM
+
     
     @State var searchText: String = ""
     var body: some View {
@@ -64,13 +66,21 @@ struct UserRoot: View {
                 case .detailUser(let borrower):
                     DetailUser(borrower: borrower)
                         .environment(router)
+                        .environment(bookVM)
+                        .environment(userVM)
                 case .editUser(let borrower):
                     AddUser(borrower: borrower)
                         .environment(router)
                         .environment(userVM)
-                case .createBorrowRecord:
-                    CreateBorrow()
+                case .createBorrowRecord(let borrower):
+                    CreateBorrow(borrower: borrower)
                         .environment(router)
+                        .environment(userVM)
+                        .environment(bookVM)
+                case .detailRecord(let bookBorrowRecord):
+                    DetailRecord(bookBorrowRecord: bookBorrowRecord)
+                        .environment(router)
+                        .environment(bookVM)
                         .environment(userVM)
                 default:
                     EmptyView()
@@ -85,4 +95,5 @@ struct UserRoot: View {
         .environment(AppRouter())
         .environment(ViewModel())
         .environment(UserViewModel())
+        .environment(BookViewModel())
 }
